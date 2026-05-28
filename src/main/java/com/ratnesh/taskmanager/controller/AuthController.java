@@ -1,7 +1,9 @@
 package com.ratnesh.taskmanager.controller;
 
 import com.ratnesh.taskmanager.dto.LoginRequest;
+import com.ratnesh.taskmanager.dto.LoginResponse;
 import com.ratnesh.taskmanager.dto.RegisterRequest;
+import com.ratnesh.taskmanager.dto.RegisterResponse;
 import com.ratnesh.taskmanager.entity.User;
 import com.ratnesh.taskmanager.service.AuthService;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody RegisterRequest request) {
+    public RegisterResponse register(
+            @RequestBody RegisterRequest request) {
 
         User user = new User();
 
@@ -27,12 +30,32 @@ public class AuthController {
         user.setPassword(request.getPassword());
         user.setRole(request.getRole());
 
-        return authService.registerUser(user);
+        User savedUser = authService.registerUser(user);
+
+        return new RegisterResponse(
+                savedUser.getId(),
+                savedUser.getName(),
+                savedUser.getEmail(),
+                savedUser.getRole(),
+                "User registered successfully"
+        );
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody LoginRequest request){
+    public LoginResponse login(
+            @RequestBody LoginRequest request) {
 
-        return authService.loginUser(request.getEmail(), request.getPassword());
+        User user = authService.loginUser(
+                request.getEmail(),
+                request.getPassword()
+        );
+
+        return new LoginResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole(),
+                "Login successful"
+        );
     }
 }
