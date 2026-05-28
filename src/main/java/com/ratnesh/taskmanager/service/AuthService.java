@@ -29,4 +29,21 @@ public class AuthService {
         // Save user
         return userRepository.save(user);
     }
+
+    public User loginUser(String email, String password){
+
+        //Check if User exists
+        User user = userRepository.findByEmail(email).
+                orElseThrow(() -> new RuntimeException("User not found."));
+
+        //Match the password entered by User with th password in DB
+        boolean passwordMatches = passwordEncoder.matches(password, user.getPassword());
+
+        //If Password does not match, throw Exception
+        if(!passwordMatches){
+            throw new RuntimeException("Invalid password");
+        }
+
+        return user;
+    }
 }
