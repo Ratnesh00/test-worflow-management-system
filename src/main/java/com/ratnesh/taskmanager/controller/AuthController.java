@@ -6,6 +6,7 @@ import com.ratnesh.taskmanager.dto.RegisterRequest;
 import com.ratnesh.taskmanager.dto.RegisterResponse;
 import com.ratnesh.taskmanager.entity.User;
 import com.ratnesh.taskmanager.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public RegisterResponse register(
-            @RequestBody RegisterRequest request) {
+            @Valid @RequestBody RegisterRequest request) {
 
         User user = new User();
 
@@ -43,7 +44,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public LoginResponse login(
-            @RequestBody LoginRequest request) {
+            @Valid @RequestBody LoginRequest request) {
 
         User user = authService.loginUser(
                 request.getEmail(),
